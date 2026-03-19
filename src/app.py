@@ -2,9 +2,18 @@ from fastapi import FastAPI
 from src.db.session import engine
 from src.db.base import Base
 from src.routers import test
+from fastapi.middleware.cors import CORSMiddleware
+from src.core.config import CORS_ORIGIN
 
 
 app = FastAPI()
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=CORS_ORIGIN,
+    allow_credentials=True,
+)
 
 
 app.include_router(test.router)
