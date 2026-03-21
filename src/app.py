@@ -3,16 +3,18 @@ from src.db.session import engine
 from src.db.base import Base
 from src.routers import test
 from fastapi.middleware.cors import CORSMiddleware
-from src.core.config import CORS_ORIGIN
-
+from src.core.config import CORS_ORIGINS
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=CORS_ORIGIN,
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -28,7 +30,8 @@ async def startup():
     except Exception as e:
         print("❌ Database connection Failed", e)
 
-
-@app.get("/")
-def home():
-    return {"message": "API is Running"}
+#* Static Files will be stored here 
+app.mount("/Public",StaticFiles(directory="Public"), name="Public")
+# @app.get("/")
+# def home():
+#     return {"message": "API is Running"}
